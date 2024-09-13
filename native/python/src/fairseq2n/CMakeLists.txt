@@ -26,4 +26,12 @@ else()
     set(CUDA_VERSION "None")
 endif()
 
+if(FAIRSEQ2N_USE_HIP)
+    set(USES_HIP "True")
+    set(HIP_VERSION "(${HIP_VERSION_MAJOR}, ${HIP_VERSION_MINOR})")
+else()
+    set(USES_HIP "False")
+    set(HIP_VERSION "None")
+endif()
+
 configure_file(config.py.in ${CMAKE_CURRENT_SOURCE_DIR}/config.py @ONLY)

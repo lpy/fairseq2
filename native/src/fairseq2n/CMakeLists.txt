@@ -86,6 +86,13 @@ if(FAIRSEQ2N_USE_CUDA)
     )
 endif()
 
+if(FAIRSEQ2N_USE_HIP)
+    target_sources(fairseq2n
+        PRIVATE
+            generation/ngram_repeat_block.hip
+    )
+endif()
+
 fairseq2n_set_compile_options(fairseq2n)
 
 target_compile_features(fairseq2n PUBLIC cxx_std_17)
@@ -98,6 +105,12 @@ if(FAIRSEQ2N_USE_CUDA)
     target_compile_features(fairseq2n PRIVATE cuda_std_17)
 
     target_compile_definitions(fairseq2n PRIVATE FAIRSEQ2N_USE_CUDA)
+endif()
+
+if(FAIRSEQ2N_USE_HIP)
+    target_compile_features(fairseq2n PRIVATE hip_std_17)
+
+    target_compile_definitions(fairseq2n PRIVATE FAIRSEQ2N_USE_HIP)
 endif()
 
 if(FAIRSEQ2N_THREAD_LIB STREQUAL "tbb")
@@ -138,6 +151,10 @@ endif()
 
 if(FAIRSEQ2N_USE_CUDA)
     target_link_libraries(fairseq2n PRIVATE CUDA::cudart)
+endif()
+
+if(FAIRSEQ2N_USE_HIP)
+    target_link_libraries(fairseq2n PRIVATE hip::host)
 endif()
 
 if(FAIRSEQ2N_THREAD_LIB STREQUAL "tbb")
@@ -207,6 +224,16 @@ else()
 
     set(CUDA_VERSION_MAJOR "std::nullopt")
     set(CUDA_VERSION_MINOR "std::nullopt")
+endif()
+
+if(FAIRSEQ2N_USE_HIP)
+    set(USES_HIP "true")
+    set(HIP_VERSION_MAJOR "${HIP_VERSION_MAJOR}")
+    set(HIP_VERSION_MINOR "${HIP_VERSION_MINOR}")
+else()
+    set(USES_HIP "false")
+    set(HIP_VERSION_MAJOR "std::nullopt")
+    set(HIP_VERSION_MINOR "std::nullopt")
 endif()
 
 configure_file(config.h.in config.h @ONLY)

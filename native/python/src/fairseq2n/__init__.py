@@ -16,7 +16,9 @@ from pathlib import Path
 
 from fairseq2n.config import (
     _CUDA_VERSION,
+    _HIP_VERSION,
     _SUPPORTS_CUDA,
+    _SUPPORTS_HIP,
     _SUPPORTS_IMAGE,
     _TORCH_VARIANT,
     _TORCH_VERSION,
@@ -66,6 +68,16 @@ def cuda_version() -> tuple[int, int] | None:
     """
     return _CUDA_VERSION
 
+def supports_hip() -> bool:
+    """Return ``True`` if fairseq2n supports HIP."""
+    return _SUPPORTS_HIP
+
+def hip_version() -> tuple[int, int] | None:
+    """Return the version of HIP that fairseq2n supports.
+    :returns:
+        The major and minor version segments.
+    """
+    return _HIP_VERSION
 
 # Indicates whether we are run under Sphinx.
 DOC_MODE = False
